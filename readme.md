@@ -1,3 +1,24 @@
-My personal notes and blogs in development
+# blog
 
-Any questions, please raise an issure or contact me at fx16150599@gmail.com
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
