@@ -1,25 +1,14 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <Counter />
-    <Post />
-    <Clock />
-  </div>
+  <router-view class="iphonex_padding"></router-view>
 </template>
 
 <script>
-import Counter from './components/Counter';
-import Post from './components/Post';
-import Clock from './components/Clock';
+import { RouterView } from 'vue-router';
 
 export default {
   name: 'App',
-  setup() {
-  },
   components: {
-    Counter,
-    Post,
-    Clock
+    RouterView
   }
 }
 </script>
