@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kovar's Site</title>
+    <script>
+        var width = window.innerWidth;
+        if (width < 450) {
+            // mobile devices
+            document.body.classList.add('mobile');
+            var fontSize = width / 37.5;
+            if (fontSize < 8) fontSize = 8;
+            document.documentElement.style.fontSize = fontSize.toFixed(1) + 'px';
+        }
+    </script>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+</html>

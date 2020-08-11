@@ -5,9 +5,30 @@ import Clock from '../common/components/Clock';
 import Counter from '../common/components/Counter';
 
 const routes = [
-    { path: '/', component: HelloWorld },
+    { path: '/hello', component: HelloWorld },
     { path: '/foo', component: Clock },
-    { path: '/bar', component: Counter }
+    { path: '/bar', component: Counter },
+    {
+        path: '/',
+        component: () => import('../pages/index/index'),
+        meta: {
+            title: '个人主页'
+        }
+    },
+    {
+        path: '/login',
+        component: () => import('../pages/login/index'),
+        meta: {
+            title: '登录'
+        }
+    },
+    {
+        path: '/register',
+        component: () => import('../pages/login/index'),
+        meta: {
+            title: '注册'
+        }
+    }
 ]
 
 export const router = createRouter({
@@ -15,7 +36,7 @@ export const router = createRouter({
     routes
 })
 
-export default function useRouter() {
+export function useRouter() {
     return {
         current: router.currentRoute.value
     }

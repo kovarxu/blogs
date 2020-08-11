@@ -1,0 +1,111 @@
+<template>
+  <header class="header">
+    <div className="avatar">
+      <img src='./imgs/avatar.jpg' />
+    </div>
+    <div className="title">
+      <div className="con">
+        <h2>Welcome to Kovar's Personal Site</h2>
+        <h4>Wisdom Today: "Don't dream it, be it."</h4>
+      </div>
+    </div>
+    <ul className="links">
+      <li>
+        <router-link to="/">博客</router-link>
+      </li>
+      <li>
+        <router-link to="/">教程</router-link>
+      </li>
+      <li>
+        <router-link to="/">感悟</router-link>
+      </li>
+      <li>
+        <router-link to="/">关于</router-link>
+      </li>
+      <li>
+        <router-link v-if="isLogin" to='/' @click="logout">登出</router-link>
+        <router-link v-else to="/login">登录</router-link>
+      </li>
+    </ul>
+  </header>
+</template>
+
+<script>
+import {toRef, watch} from 'vue';
+import {RouterLink} from 'vue-router';
+import store from '../../store';
+
+export default {
+    name: 'Header',
+    setup() {
+      const logout = () => {
+        store.dispatch('logout');
+      }
+
+      const isLogin = toRef(store.state, 'isLogin');
+
+      return {
+        logout,
+        isLogin
+      }
+    },
+    components: {
+      RouterLink
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.header {
+  padding: 10px 20px;
+  line-height: 80px;
+  background: #eee;
+  display: flex;
+  .avatar {
+    width: 80px;
+    height: 80px;
+    margin-right: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    img {
+      width: 100%;
+    }
+  }
+
+  .title {
+    flex: 1;
+    .con {
+      /* width: fit-content; */
+      /* margin: 0 auto; */
+    }
+    h2 {
+      line-height: 40px;
+    }
+    h4 {
+      font-weight: normal;
+      text-indent: 2em;
+      font-size: 12px;
+      font-style: italic;
+      line-height: 40px;
+      &::before {
+        content: '';
+        display: inline-block;
+        height: 1px;
+        width: 4em;
+        margin-right: 5px;
+        vertical-align: middle;
+        background: #999;
+      }
+    }
+  }
+
+  .links {
+    li {
+      display: inline-block;
+      margin-left: 6px;
+      margin-right: 6px;
+      font-size: 14px;
+    }
+  }
+}
+</style>

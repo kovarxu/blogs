@@ -43,3 +43,16 @@ onErrorCaptured
 ### customRef markRaw shallowReactive shadllowRef
 
 they are less likely used
+
+### inject, project
+
+
+### focus
+
+* reactive
+* component
+* compiler
+* method & nexttick
+* reusable (slot & comp)
+* router
+* state
