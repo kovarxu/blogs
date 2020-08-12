@@ -28,6 +28,20 @@ const routes = [
         meta: {
             title: '注册'
         }
+    },
+    {
+        path: '/article/detail',
+        component: () => import('../pages/article/index'),
+        meta: {
+            title: '文章详情'
+        },
+    },
+    {
+        path: '/article/add',
+        component: () => import('../pages/article/add'),
+        meta: {
+            title: '写文章'
+        }
     }
 ]
 

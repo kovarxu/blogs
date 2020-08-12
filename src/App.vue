@@ -50,9 +50,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  .body-section {
-    max-width: 800px;
-    margin: 0 auto;
-  }
+}
+.body-section {
+  width: 920px;
+  margin: 0 auto;
 }
 </style>
