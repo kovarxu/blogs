@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <div className="avatar">
+    <div className="avatar" @click="toAdmin">
       <img src='./imgs/avatar.jpg' />
     </div>
     <div className="title">
@@ -27,13 +27,35 @@
         <router-link v-else to="/login">登录</router-link>
       </li>
     </ul>
+
+    <div v-if="isAdminPanelShow" class="admin-panel">
+      <div class="admin-panel__header">
+        管理员菜单
+        <svg-icon 
+          iconName="close" 
+          iconClass="admin-panel__close" 
+          :clickEvent="() => isAdminPanelShow=false" 
+        />
+      </div>
+      <div class="admin-panel__controls">
+        <a class="admin-panel__controls__btn" @click="toAddArticle">写文章</a>
+        <a class="admin-panel__controls__btn">文章管理</a>
+        <a class="admin-panel__controls__btn">用户管理</a>
+      </div>
+
+      <div class="admin-panel__footer">
+        欢迎管理员！
+      </div>
+    </div>
   </header>
 </template>
 
 <script>
-import {toRef, watch} from 'vue';
+import {ref, toRef} from 'vue';
 import {RouterLink} from 'vue-router';
 import store from '../../store';
+import {router} from '../../router';
+import SvgIcon from '@/common/components/SvgIcon';
 
 export default {
     name: 'Header',
@@ -43,14 +65,31 @@ export default {
       }
 
       const isLogin = toRef(store.state, 'isLogin');
+      const isMaster = toRef(store.state, 'isMaster');
+      const isAdminPanelShow = ref(false);
+
+      const toAdmin = () => {
+        if (isMaster.value && !isAdminPanelShow.value) {
+          isAdminPanelShow.value = true;
+        }
+      }
+
+      const toAddArticle = () => {
+        router.push('/article/add');
+        isAdminPanelShow.value = false;
+      }
 
       return {
+        isLogin,
+        isAdminPanelShow,
+        toAdmin,
+        toAddArticle,
         logout,
-        isLogin
       }
     },
     components: {
-      RouterLink
+      RouterLink,
+      SvgIcon
     }
 }
 </script>
@@ -107,5 +146,59 @@ export default {
       font-size: 14px;
     }
   }
+
+  .admin-panel {
+    position: fixed;
+    z-index: 1;
+    top: 70px;
+    width: 500px;
+    height: 300px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    background: #eee;
+    border-radius: 6px;
+    .admin-panel__header {
+      line-height: 40px;
+      font-size: 24px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .admin-panel__controls {
+      flex: 1;
+      display: flex;
+      padding: 10px;
+    }
+    .admin-panel__controls__btn {
+      height: 30px;
+      margin-right: 10px;
+      padding: 0 10px;
+      min-width: 5em;
+      background: cadetblue;
+      border-radius: 2px;
+      color: #fff;
+      line-height: 30px;
+      text-align: center;
+    }
+    .admin-panel__footer {
+      line-height: 24px;
+      font-size: 14px;
+      padding-left: 10px;
+      border-top: 1px solid #ddd;
+    }
+  }
+}
+</style>
+
+<style>
+.admin-panel__close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
 }
 </style>

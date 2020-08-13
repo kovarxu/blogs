@@ -3,7 +3,8 @@ import login from './modules/login';
 import { get } from '../common/utils';
 
 const gState = {
-	isLogin: false
+	isLogin: false,
+	isMaster: false
 };
 
 const gGetters = {};
@@ -11,6 +12,9 @@ const gGetters = {};
 const gMutations = {
 	mutateLogin(state, result) {
 		state.isLogin = !!result;
+	},
+	mutateMaster(state, master) {
+		state.isMaster = master === 'kovarxu';
 	}
 };
 
@@ -19,6 +23,7 @@ const gActions = {
 		get('/action/checkLoginStatus')
 			.then(data => {
 				commit('mutateLogin', data.data.isLogin);
+				commit('mutateMaster', data.data.user);
 			})
 	},
 

@@ -98,21 +98,12 @@ export default {
       if (checkMessage()) {
         store.dispatch('login/login', { username, password })
           .then(data => {
-            const ret = data.ret;
-            switch(ret) {
-              case 0:
-                // 登录成功
-                store.commit('mutateLogin', true);
-                router.push('/');
-                break;
-              case 3004:
-                props.showTips('用户名不存在');
-                break;
-              case 3005:
-                props.showTips('密码错误，请重新输入');
-                break;
-              default:
-                props.showTips('未知错误');
+            const { ret, errmsg } = data;
+            if (ret === 0) {
+              store.dispatch('checkIsLogin');
+              router.push('/');
+            } else {
+              props.showTips(errmsg);
             }
           });
       }
@@ -127,17 +118,11 @@ export default {
       if (checkMessage()) {
         store.dispatch('login/register', { username, password, email })
           .then(data => {
-            const ret = data.ret;
-            switch(ret) {
-              case 0:
-                // 注册成功
-                props.showTips('注册成功');
-                break;
-              case 3003:
-                props.showTips('用户名已存在');
-                break;
-              default:
-                props.showTips('未知错误');
+            const { ret, errmsg } = data;
+            if (ret === 0) {
+              props.showTips('注册成功');
+            } else {
+              props.showTips(errmsg);
             }
           });;
       }

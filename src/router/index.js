@@ -10,10 +10,14 @@ const routes = [
     { path: '/bar', component: Counter },
     {
         path: '/',
-        component: () => import('../pages/index/index'),
+        component: () => import('../pages/blog/index'),
         meta: {
             title: '个人主页'
         }
+    },
+    {
+        path: '/blog',
+        redirect: '/'
     },
     {
         path: '/login',
