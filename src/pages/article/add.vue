@@ -9,7 +9,7 @@
     </div>
 
     <div class="article-content">
-      <textarea ref="contentElement"></textarea>
+      <div id="editor"></div>
     </div>
 
     <div class="article-tags">
@@ -55,14 +55,15 @@
 
     <div class="submit-btns">
       <a class="btn save-btn" @click="onSave">保存</a>
-      <a class="btn tmp-save-btn">预览</a>
+      <a class="btn tmp-save-btn" @click="onPreview">预览</a>
     </div>
   </div>
 </template>
 
 <script>
-import {ref} from 'vue';
-import {post, trim} from '../../common/utils';
+import {ref, onMounted} from 'vue';
+import {get, post, trim} from '../../common/utils';
+import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
 
 export default {
@@ -70,7 +71,6 @@ export default {
   setup(props) {
     const title = ref('');
     const describe = ref('');
-    const contentElement = ref(null);
     const tagInput = ref('');
     const tags = ref([]);
     const category = ref('blog');
@@ -81,31 +81,80 @@ export default {
       'thinking': '心得'
     }
 
+    const currentRoute = router.currentRoute.value;
+    const isEdit = currentRoute.path === '/article/edit';
+    const id = currentRoute.query.id;
+    let editor = null;
+
+    onMounted(() => {
+      if (window.ace) {
+        editor = ace.edit("editor");
+        editor.session.setMode("ace/mode/markdown");
+      } else {
+        console.error('ace编辑器加载失败');
+      }
+    })
+
+    if (isEdit) {
+      get('/action/article/detail', { id })
+        .then(res => {
+          const {ret, data, errmsg} = res;
+          if (ret === 0) {
+            title.value = data.title || '';
+            editor && editor.setValue(data.body || '');
+            describe.value = data.describe || '';
+            tags.value = data.tags || [];
+            category.value = data.category || 'blog';
+            submit.value = 0;
+          } else {
+            props.showTips(errmsg);
+          }
+        })
+    }
+
     const onSave = () => {
       const vTitle = trim(title.value);
       const vDesc = trim(describe.value);
-      const vBody = contentElement.value.value;
+      const postData = {
+        title: vTitle,
+        describe: vDesc,
+        body: editor ? editor.getValue() : '',
+        tags: tags.value,
+        category: category.value,
+        isShow: submit.value
+      }
 
       if (!vTitle) {
         props.showTips('请输入文章标题');
         return;
       }
       
-      return post('/action/article/add', {
-        title: vTitle,
-        describe: vDesc,
-        body: vBody,
-        tags: tags.value,
-        category: category.value,
-        isShow: !!submit.value
-      }).then(data => {
-        const { ret, errmsg } = data;
-        if (ret === 0) {
-          props.showTips('添加文章成功');
-        } else {
-          props.showTips(errmsg);
-        }
-      })
+      if (isEdit) {
+        return post('/action/article/edit', {id, ...postData}).then(data => {
+          const { ret, errmsg } = data;
+          if (ret === 0) {
+            props.showTips('修改文章成功');
+            router.push('/article/detail?id=' + data.data.id);
+          } else {
+            props.showTips(errmsg);
+          }
+        })
+      } else {
+        return post('/action/article/add', postData).then(data => {
+          const { ret, errmsg } = data;
+          if (ret === 0) {
+            props.showTips('添加文章成功');
+            router.push('/article/detail?id=' + data.data.id);
+          } else {
+            props.showTips(errmsg);
+          }
+        })
+      }
+      
+    }
+
+    const onPreview = () => {
+
     }
 
     const onAddTag = (e) => {
@@ -136,13 +185,13 @@ export default {
     return {
       title,
       describe,
-      contentElement,
       tagInput,
       tags,
       category,
       categoryConf,
       submit,
       onSave,
+      onPreview,
       onAddTag,
       onTagDel,
       onSelectCategory,
@@ -170,13 +219,14 @@ export default {
     border: 1px solid #d8d8d8;
     border-radius: 5px;
   }
-  textarea {
+  #editor {
     min-height: 200px;
     height: 600px;
-    height: calc(100vh - 340px);
+    height: calc(100vh - 300px);
     padding-top: 10px;
     padding-bottom: 10px;
     resize: none;
+    font-size: 14px;
   }
   .single-tag .tag-input {
     display: block;
@@ -193,12 +243,12 @@ export default {
 .article-title {
   font-size: 24px;
   line-height: 30px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 .article-desc {
   font-size: 18px;
   line-height: 24px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 .article-content {
   font-size: 18px;

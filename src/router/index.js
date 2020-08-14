@@ -46,6 +46,13 @@ const routes = [
         meta: {
             title: '写文章'
         }
+    },
+    {
+        path: '/article/edit',
+        component: () => import('../pages/article/add'),
+        meta: {
+            title: '修改文章'
+        }
     }
 ]
 

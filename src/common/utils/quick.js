@@ -5,6 +5,29 @@ export const trim = (target) => {
   return target;
 }
 
+export const injectScript = ({fromUrl, src, remove}) => {
+  const s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.async = true;
+
+  if (fromUrl) {
+      s.src = src;
+  } else {
+      s.innerText = src;
+  }
+  
+  const t = document.getElementsByTagName('body')[0];
+  t.appendChild(s);
+
+  // we just remove it as a macro task
+  // this may cause some problems in your program, be cautious
+  if (remove) {
+      setTimeout(() => {
+          t.removeChild(s);
+      })
+  }
+}
+
 const formatDigit = (digit) => {
   const digitInStr = String(digit);
   return digitInStr.length === 1 ? ('0' + digitInStr) : digitInStr;
