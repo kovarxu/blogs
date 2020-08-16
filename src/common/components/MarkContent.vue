@@ -3,17 +3,15 @@
 </template>
 
 <script>
+import {ref} from 'vue';
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/qtcreator_light.css';
-import './markdown.scss';
-import {ref} from 'vue';
-import {get} from '../../common/utils';
-import {router} from '../../router';
+import '@/assets/markdown.scss';
 
 export default {
-  name: 'Article',
-  setup(props) {
+  name: 'MarkContent',
+  setup() {
     const markContent = ref('');
     const mi = new MarkdownIt({
       highlight: function (str, lang) {
@@ -41,38 +39,11 @@ export default {
       markContent.value = mi.render(body);
     }
 
-    // const result = mi.render();
-    const id = router.currentRoute.value.query.id;
-    if (id) {
-      get('/action/article/detail', { id })
-        .then(res => {
-          const { ret, data, errmsg } = res;
-          if (ret === 0) {
-            renderParagraph(data);
-          } else {
-            props.showTips(errmsg);
-          }
-        })
-    }
-
     return {
-      markContent
+      markContent,
+      renderParagraph
     }
   },
-  props: {
-    showTips: {
-      type: Function
-    }
-  }
+  
 }
 </script>
-
-<style lang="scss">
-.markdown-page {
-  margin-top: 20px;
-  margin-bottom: 50px;
-}
-pre.hljs {
-  margin: 18px 0;
-}
-</style>

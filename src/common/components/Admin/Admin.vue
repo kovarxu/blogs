@@ -19,9 +19,28 @@
       <a class="admin-panel__controls__btn" @click="toAddArticle">写文章</a>
       <a class="admin-panel__controls__btn" @click="editArticle">编辑当前文章</a>
       <a class="admin-panel__controls__btn" @click="manageDrafts">草稿箱</a>
+      <div class="admin-panel__controls__btn">
+        上传静态文件
+        <form action="#frame" enctype="multipart/form-data" ref="fileUploadForm">
+          <input 
+            type="file" 
+            multiple="multiple" 
+            name="uploads[]" 
+            class="admin-panel__upload-file" 
+            @change="uploadStatic"
+          />
+        </form>
+      </div>
     </div>
     <div v-else-if="mode === 1" class="admin-panel__body admin-panel__drafts">
       <draft-manager :closeThePanel="closeThePanel" :changeAdminMessage="changeAdminMessage" />
+    </div>
+    <div v-else-if="mode === 2" class="admin-panel__body admin-panel__uploads">
+      <ul>
+        <li v-for="(filepath, index) in uploadFiles" :key="index" class="admin-panel__uploads__item">
+          {{ filepath }}
+        </li>
+      </ul>
     </div>
 
     <div class="admin-panel__footer" v-html="adminMessage"></div>
@@ -33,12 +52,15 @@ import {ref} from 'vue';
 import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
 import DraftManager from './Drafts';
+import {post} from '@/common/utils';
 
 export default {
   name: 'AdminPanel',
   setup(props, context) {
     const adminMessage = ref('欢迎管理员');
-    const mode = ref(0); // 0 控制板 1 草稿管理
+    const fileUploadForm = ref(null);
+    const uploadFiles = ref([]);
+    const mode = ref(0); // 0 控制板 1 草稿管理 2 静态文件上传
 
     const closeThePanel = () => {
       context.emit('close');
@@ -69,6 +91,24 @@ export default {
       }
     }
 
+    const uploadStatic = (e) => {
+      if (fileUploadForm.value && e.target.value) {
+        const formData = new FormData(fileUploadForm.value);
+        post('/api/upload', formData, {multipart: true})
+          .then(res => {
+            const {ret, data, errmsg} = res;
+            if (ret === 0) {
+              uploadFiles.value = data.paths.map(path => `${location.origin}/${path}`);
+              mode.value = 2;
+              changeAdminMessage('上传成功');
+            } else {
+              changeAdminMessage('<span class="red">上传失败</span>');
+            }
+          });
+        e.target.value = '';
+      }
+    }
+
     const manageDrafts = () => {
       mode.value = 1;
     }
@@ -80,6 +120,9 @@ export default {
       editArticle,
       closeThePanel,
       manageDrafts,
+      fileUploadForm,
+      uploadStatic,
+      uploadFiles,
       changeAdminMessage
     }
   },
@@ -121,6 +164,7 @@ export default {
     display: flex;
   }
   .admin-panel__controls__btn {
+    position: relative;
     height: 30px;
     margin-right: 10px;
     padding: 0 10px;
@@ -130,6 +174,17 @@ export default {
     color: #fff;
     line-height: 30px;
     text-align: center;
+  }
+  .admin-panel__upload-file {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+  .admin-panel__uploads__item {
+    line-height: 30px;
   }
   .admin-panel__footer {
     line-height: 24px;

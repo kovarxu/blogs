@@ -26,7 +26,14 @@ export const get = (url, params = {}) => {
 }
 
 export const post = (url, data = {}) => {
-  console.log(url, data);
+  if (data instanceof window.FormData) {
+    return axios({
+      url,
+      method: 'POST',
+      data
+    })
+  }
+  
   return axios({
     url,
     method: 'POST',

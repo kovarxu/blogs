@@ -78,6 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  min-width: 920px;
   padding: 10px 20px;
   line-height: 80px;
   background: #eee;

@@ -7,14 +7,12 @@ module.exports = {
             proxy: {
                 "/action": {
                     target: 'http://localhost:3001'
-                }
+                },
+                "/api": {
+                    target: 'http://localhost:3001'
+                },
             }
-        },
-        plugins: [
-            new HTMLWebpackPlugin({
-                template: './src/index.html'
-            })
-        ]
+        }
     },
     // 直接在config里面改好像不行
     chainWebpack: config => {
@@ -33,5 +31,10 @@ module.exports = {
                 symbolId: 'icon-[name]'
             })
             .end()
+        config.plugin('html')
+            .tap(args => {
+                args[0].template = path.resolve('./src/index.html');
+                return args;
+            })
     }
 }

@@ -62,9 +62,10 @@
 
 <script>
 import {ref, onMounted} from 'vue';
-import {get, post, trim} from '../../common/utils';
+import {get, post, trim, getStorage, setStorage} from '../../common/utils';
 import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
+let isBackFromPreviewPage = false; // 是否从preview页面返回的
 
 export default {
   name: 'AddArticle',
@@ -93,24 +94,33 @@ export default {
       } else {
         console.error('ace编辑器加载失败');
       }
-    })
 
-    if (isEdit) {
-      get('/action/article/detail', { id })
-        .then(res => {
-          const {ret, data, errmsg} = res;
-          if (ret === 0) {
-            title.value = data.title || '';
-            editor && editor.setValue(data.body || '');
-            describe.value = data.describe || '';
-            tags.value = data.tags || [];
-            category.value = data.category || 'blog';
-            submit.value = 0;
-          } else {
-            props.showTips(errmsg);
-          }
-        })
-    }
+      const fillEditableWithData = (data) => {
+        title.value = data.title || '';
+        editor && editor.setValue(data.body || '');
+        describe.value = data.describe || '';
+        tags.value = data.tags || [];
+        category.value = data.category || 'blog';
+      }
+
+      if (isBackFromPreviewPage) {
+        const data = getStorage('KOVAR_NEW_PAGE_PREVIEW');
+        fillEditableWithData(data);
+      } else if (isEdit) {
+        get('/action/article/detail', { id })
+          .then(res => {
+            const {ret, data, errmsg} = res;
+            if (ret === 0) {
+              fillEditableWithData(data);
+              submit.value = 0;
+            } else {
+              props.showTips(errmsg);
+            }
+          })
+      } else {
+        fillEditableWithData({});
+      }
+    })
 
     const onSave = () => {
       const vTitle = trim(title.value);
@@ -154,7 +164,14 @@ export default {
     }
 
     const onPreview = () => {
-
+      setStorage('KOVAR_NEW_PAGE_PREVIEW', {
+        title: title.value,
+        body: editor.getValue() || '',
+        describe: describe.value,
+        tags: tags.value,
+        category: category.value
+      })
+      router.push('/article/preview');
     }
 
     const onAddTag = (e) => {
@@ -163,7 +180,7 @@ export default {
         const tag = trim(tagInput.value);
         if (tags.value.includes(tag)) {
           props.showTips('该标签已存在');
-        } else {
+        } else if (tag) {
           tags.value.push(tag);
           tagInput.value = '';
         }
@@ -198,13 +215,19 @@ export default {
       onSelectSubmitType,
     }
   },
+  beforeRouteEnter(to, from, next) {
+    if (from.path === '/article/preview') {
+      isBackFromPreviewPage = true;
+    }
+    next();
+  },
   props: {
     showTips: {
       type: Function
     }
   },
   components: {
-    SvgIcon
+    SvgIcon,
   }
 }
 </script>

@@ -1,37 +1,44 @@
 <template>
-  <div class="blog-wrapper">
-    <section 
-      v-for="(item, index) in articles" 
-      :key="index" 
-      class="blog-item"
-      @click="() => toDetail(index)"
-    >
-      <h4 class="blog-item__title">{{ item.title }}</h4>
-      <p class="blog-item__desc">{{ item.describe }}</p>
-      <div class="blog-item__meta">
-        <div class="blog-item__meta__time">发布时间：{{ item.addTime }}</div>
-        <div class="blog-item__meta__time">最后修改时间：{{ item.modifyTime }}</div>
-        <div class="blog-item__meta__support">
-          <svg-icon iconName="ding" iconClass="support" />
-          {{ item.support }}
+  <div class="blog-wrapper" v-show="inited">
+    <div class="blog-item-wrapper">
+      <section 
+        v-for="(item, index) in articles" 
+        :key="index" 
+        class="blog-item"
+        @click="() => toDetail(index)"
+      >
+        <h4 class="blog-item__title">{{ item.title }}</h4>
+        <p class="blog-item__desc">{{ item.describe }}</p>
+        <div class="blog-item__meta">
+          <div class="blog-item__meta__time">发布时间：{{ item.addTime }}</div>
+          <div class="blog-item__meta__time">最后修改时间：{{ item.modifyTime }}</div>
+          <div class="blog-item__meta__support">
+            <svg-icon iconName="ding" iconClass="support" />
+            {{ item.support }}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
+    <pagination :totalPage="totalPage" :onChoosePage="onPaginationChoosePage" class="blog-pagination" />
   </div>
 </template>
 
 <script>
-import {ref} from 'vue';
+import {ref, computed} from 'vue';
 import {get, formatTime} from '@/common/utils';
 import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
+import Pagination from '@/common/components/Pagination';
 
 export default {
   name: 'Blog',
   setup(props) {
+    const inited = ref(false);
     const page = ref(1);
     const articles = ref([]);
     const count = ref(0);
+
+    const totalPage = computed(() => Math.ceil(count.value / 10));
 
     const format = (articleList) => {
       return articleList.map(item => {
@@ -45,6 +52,7 @@ export default {
       return get('/action/blog/list', {page: page.value, isShow: 1})
         .then(res => {
           const {ret, data, errmsg} = res;
+          inited.value = true;
           if (ret === 0) {
             count.value = data.count;
             articles.value = format(data.list);
@@ -52,6 +60,11 @@ export default {
             props.showTips(errmsg);
           }
         })
+    }
+
+    const onPaginationChoosePage = (pageIndex) => {
+      page.value = pageIndex;
+      getList(pageIndex);
     }
 
     const toDetail = (index) => {
@@ -62,10 +75,13 @@ export default {
     getList();
 
     return {
+      inited,
       count,
       page,
+      totalPage,
       articles,
-      toDetail
+      toDetail,
+      onPaginationChoosePage
     }
   },
   props: {
@@ -74,14 +90,19 @@ export default {
     }
   },
   components: {
-    SvgIcon
+    SvgIcon,
+    Pagination
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .blog-wrapper {
-  padding: 10px 15px;
+  width: 800px;
+  padding: 10px 15px 30px;
+}
+.blog-item-wrapper {
+  margin-bottom: 30px;
 }
 .blog-item {
   padding: 10px 20px 20px;

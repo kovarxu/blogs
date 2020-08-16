@@ -6,7 +6,7 @@ ol,ul{list-style:none}
 button,h1,h2,h3,h4,h5,h6,input,select{font-size:100%;font-family:inherit}
 table{border-collapse:collapse;border-spacing:0}
 a{text-decoration:none;color:#333}
-body{margin:0 auto;background:#FFF;font: 16px/1.5 Helvetica, Arial, sans-serif;line-height:1.5;color:#666;-webkit-text-size-adjust:100%!important;-webkit-user-select:none;user-select:none;background-color:#fff;line-height: 1.5}
+body{margin:0 auto;background:#FFF;font: 16px/1.5 Helvetica, Arial, sans-serif;line-height:1.5;color:#666;-webkit-text-size-adjust:100%!important;background-color:#fff;line-height: 1.5}
 
 .h,.hide{display:none!important}
 .show{display:block!important}

@@ -1,8 +1,10 @@
-export const trim = (target) => {
-  if (typeof target === 'string') {
-    return target.replace(/^\s*|\s*$/g, '');
-  }
-  return target;
+/* easy-handle */
+
+export const selectFrom = (obj, attrList) => {
+  return attrList.reduce((o, attrKey) => {
+    o[attrKey] = obj[attrKey];
+    return o;
+  }, {});
 }
 
 export const injectScript = ({fromUrl, src, remove}) => {
@@ -26,6 +28,34 @@ export const injectScript = ({fromUrl, src, remove}) => {
           t.removeChild(s);
       })
   }
+}
+
+/* storage */
+
+// const kovarKey = () => `k_${Math.random().toString(36).slice(3,9)}`;
+
+export const setStorage = (key, val) => {
+  localStorage.setItem(key, JSON.stringify(val));
+  return key;
+}
+
+export const removeStorage = (key) => {
+  localStorage.removeItem(key);
+}
+
+export const getStorage = (key, remove = false) => {
+  const val = localStorage.getItem(key);
+  remove && removeStorage(key);
+  return JSON.parse(val);
+}
+
+/* formatter */
+
+export const trim = (target) => {
+  if (typeof target === 'string') {
+    return target.replace(/^\s*|\s*$/g, '');
+  }
+  return target;
 }
 
 const formatDigit = (digit) => {

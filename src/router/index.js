@@ -35,9 +35,16 @@ const routes = [
     },
     {
         path: '/article/detail',
-        component: () => import('../pages/article/index'),
+        component: () => import('../pages/article/detail'),
         meta: {
             title: '文章详情'
+        }
+    },
+    {
+        path: '/article/preview',
+        component: () => import('../pages/article/detail'),
+        meta: {
+            title: '文章预览'
         },
     },
     {
@@ -45,7 +52,7 @@ const routes = [
         component: () => import('../pages/article/add'),
         meta: {
             title: '写文章'
-        }
+        },
     },
     {
         path: '/article/edit',
