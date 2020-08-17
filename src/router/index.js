@@ -10,7 +10,7 @@ const routes = [
     { path: '/bar', component: Counter },
     {
         path: '/',
-        component: () => import('../pages/blog/index'),
+        component: () => import(/* webpackChunkName: "blog" */ '../pages/blog/index'),
         meta: {
             title: '个人主页'
         }
@@ -21,42 +21,42 @@ const routes = [
     },
     {
         path: '/login',
-        component: () => import('../pages/login/index'),
+        component: () => import(/* webpackChunkName: "login" */ '../pages/login/index'),
         meta: {
             title: '登录'
         }
     },
     {
         path: '/register',
-        component: () => import('../pages/login/index'),
+        component: () => import(/* webpackChunkName: "login" */ '../pages/login/index'),
         meta: {
             title: '注册'
         }
     },
     {
         path: '/article/detail',
-        component: () => import('../pages/article/detail'),
+        component: () => import(/* webpackChunkName: "detail" */ '../pages/article/detail'),
         meta: {
             title: '文章详情'
         }
     },
     {
         path: '/article/preview',
-        component: () => import('../pages/article/detail'),
+        component: () => import(/* webpackChunkName: "detail" */ '../pages/article/detail'),
         meta: {
             title: '文章预览'
         },
     },
     {
         path: '/article/add',
-        component: () => import('../pages/article/add'),
+        component: () => import(/* webpackChunkName: "add" */ '../pages/article/add'),
         meta: {
             title: '写文章'
         },
     },
     {
         path: '/article/edit',
-        component: () => import('../pages/article/add'),
+        component: () => import(/* webpackChunkName: "add" */ '../pages/article/add'),
         meta: {
             title: '修改文章'
         }
