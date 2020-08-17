@@ -2,6 +2,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
 
 module.exports = {
+    publicPath: process.env.NODE_ENV === 'production' ? '/static' : '',
     configureWebpack: {
         devServer: {
             proxy: {
