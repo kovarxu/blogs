@@ -13,7 +13,7 @@ export default {
   name: 'MarkContent',
   setup() {
     const markContent = ref('');
-    const mi = new MarkdownIt({
+    const md = new MarkdownIt({
       highlight: function (str, lang) {
         if (lang && hljs.getLanguage(lang)) {
           try {
@@ -36,7 +36,7 @@ export default {
         support
       } = data;
 
-      markContent.value = mi.render(body);
+      markContent.value = md.render(body);
     }
 
     return {

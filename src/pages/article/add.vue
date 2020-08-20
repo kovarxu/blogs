@@ -91,6 +91,7 @@ export default {
       if (window.ace) {
         editor = ace.edit("editor");
         editor.session.setMode("ace/mode/markdown");
+        editor.setOption("wrap", true);
       } else {
         console.error('ace编辑器加载失败');
       }
@@ -241,15 +242,17 @@ export default {
     padding: 3px 8px;
     border: 1px solid #d8d8d8;
     border-radius: 5px;
+    box-sizing: border-box;
   }
   #editor {
     min-height: 200px;
-    height: 600px;
-    height: calc(100vh - 300px);
+    height: 1000px;
     padding-top: 10px;
     padding-bottom: 10px;
     resize: none;
-    font-size: 14px;
+    font-size: 16px;
+    border: 1px solid #eef;
+    border-radius: 3px;
   }
   .single-tag .tag-input {
     display: block;
@@ -276,7 +279,7 @@ export default {
 .article-content {
   font-size: 18px;
   line-height: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 40px;
 }
 .article-tags {
   margin-bottom: 20px;

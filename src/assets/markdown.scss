@@ -1,6 +1,8 @@
 .markdown-page {
   img {
     max-width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
   }
     
   h1, h2, h3, h4 {
@@ -18,8 +20,8 @@
   }
   
   p {
-    margin-top: 8px;
-    margin-bottom: 3px;
+    margin-top: 10px;
+    margin-bottom: 5px;
   }
   h1 {
     font-size: 48px;
@@ -62,14 +64,33 @@
   ul, ol {
     padding: 0;
     padding-left: 18px;
-    margin: 0;
+    margin: 10px 0;
   }
-  li {
-    line-height: 24px;
-  }
-  p, ul, ol {
+  p, ul, ol, li {
     font-size: 18px;
-    line-height: 28px;
+    line-height: 34px;
+  }
+  ol li::before {
+    content: '';
+    display: inline-block;
+    margin-right: 20px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #666;
+    vertical-align: middle;
+  }
+  ul {
+    counter-reset: cc;
+  }
+  ul li::before {
+    counter-increment: cc;
+    content: counter(cc, upper-roman) ".";
+    display: inline-block;
+    min-width: 1em;
+    margin-right: 20px;
+    color: #666;
+    vertical-align: middle;
   }
   
   ol ol, ul ol {
@@ -182,6 +203,7 @@
     border-top: 1px solid #ccc;
     padding: 10px;
     text-align: left;
+    vertical-align: middle;
   }
   
   table th {

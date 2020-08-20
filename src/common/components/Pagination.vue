@@ -2,11 +2,11 @@
   <div class="pagination">
     <a @click="handleBackClick" :class="['pagination-item', {disabled: backDisable}]">&lt; 上一页</a>
     <ul class="pagination-page-selectors">
-      <li 
+      <!-- <li 
         v-for="id in totolPage" 
         :key="id"
         :class="['pagination-page-selectors__item', {active: currentPage === id}]"
-      >{{ id + 1 }}</li>
+      >{{ id + 1 }}</li> -->
     </ul>
     <a @click="handlePrevClick" :class="['pagination-item', {disabled: prevDisable}]">下一页 &gt;</a>
   </div>
@@ -78,6 +78,10 @@ export default {
   }
   &.disabled {
     opacity: .6;
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
   }
   text-align: center;
 }

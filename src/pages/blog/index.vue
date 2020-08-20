@@ -54,7 +54,7 @@ export default {
           const {ret, data, errmsg} = res;
           inited.value = true;
           if (ret === 0) {
-            count.value = data.count;
+            count.value = data.count || 0;
             articles.value = format(data.list);
           } else {
             props.showTips(errmsg);
@@ -105,6 +105,7 @@ export default {
   margin-bottom: 30px;
 }
 .blog-item {
+  cursor: default;
   padding: 10px 20px 20px;
   color: #333;
   box-sizing: border-box;
@@ -124,13 +125,15 @@ export default {
     margin: 12px 0;
   }
   .blog-item__desc {
-    padding-bottom: 15px;
+    margin-bottom: 15px;
     font-weight: 300;
     color: #555;
     font-size: 18px;
     -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
   }
   .blog-item__meta {
     display: flex;
