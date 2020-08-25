@@ -25,6 +25,7 @@
 
 <script>
 import {ref, computed} from 'vue';
+import {onBeforeRouteUpdate} from 'vue-router';
 import {get, formatTime} from '@/common/utils';
 import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
@@ -48,8 +49,9 @@ export default {
       })
     }
 
-    const getList = () => {
-      return get('/action/blog/list', {page: page.value, isShow: 1})
+    const getList = (to) => {
+      const type = to.query.type || 'blog';
+      return get('/action/blog/list', {page: page.value, isShow: 1, category: type})
         .then(res => {
           const {ret, data, errmsg} = res;
           inited.value = true;
@@ -64,15 +66,19 @@ export default {
 
     const onPaginationChoosePage = (pageIndex) => {
       page.value = pageIndex;
-      getList(pageIndex);
+      getList(router.currentRoute.value);
     }
 
     const toDetail = (index) => {
-      console.log(articles.value);
       router.push('/article/detail?id=' + articles.value[index].id);
     }
 
-    getList();
+    getList(router.currentRoute.value);
+
+    onBeforeRouteUpdate((to, from) => {
+      console.log(to);
+      getList(to);
+    })
 
     return {
       inited,

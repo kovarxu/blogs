@@ -11,17 +11,17 @@
     </div>
     <ul className="links">
       <li>
-        <router-link to="/">博客</router-link>
+        <router-link to="/blog">博客</router-link>
       </li>
       <li>
-        <router-link to="/">教程</router-link>
+        <router-link to="/blog?type=tutorial">教程</router-link>
       </li>
       <li>
-        <router-link to="/">感悟</router-link>
+        <router-link to="/blog?type=thinking">感悟</router-link>
       </li>
-      <li>
+      <!-- <li>
         <router-link to="/">关于</router-link>
-      </li>
+      </li> -->
       <li>
         <router-link v-if="isLogin" to='/' @click="logout">登出</router-link>
         <router-link v-else to="/login">登录</router-link>
@@ -78,6 +78,8 @@ export default {
 
 <style lang="scss" scoped>
 .header {
+  width: 100vw;
+  box-sizing: border-box;
   min-width: 920px;
   padding: 10px 20px;
   line-height: 80px;
@@ -122,11 +124,12 @@ export default {
   }
 
   .links {
+    margin-right: 20px;
     li {
       display: inline-block;
       margin-left: 6px;
       margin-right: 6px;
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 }
