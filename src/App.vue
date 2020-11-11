@@ -29,7 +29,6 @@ export default {
       tipsRef.value && tipsRef.value.hide();
     }
     store.dispatch('checkIsLogin');
-    
     return {
       tipsRef,
       showTips,

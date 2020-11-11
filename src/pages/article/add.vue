@@ -61,10 +61,11 @@
 </template>
 
 <script>
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, onBeforeUnmount} from 'vue';
 import {get, post, trim, getStorage, setStorage} from '../../common/utils';
 import {router} from '@/router';
 import SvgIcon from '@/common/components/SvgIcon';
+import {categoryConf} from '../../common/constants';
 let isBackFromPreviewPage = false; // 是否从preview页面返回的
 
 export default {
@@ -76,18 +77,21 @@ export default {
     const tags = ref([]);
     const category = ref('blog');
     const submit = ref(0);
-    const categoryConf = {
-      'blog': '博客',
-      'tutorial': '教程',
-      'thinking': '心得'
-    }
 
     const currentRoute = router.currentRoute.value;
     const isEdit = currentRoute.path === '/article/edit';
     const id = currentRoute.query.id;
     let editor = null;
 
+    // 确认退出的确认功能
+    const confirmExit = (e) => {
+      e.returnValue = '确认修改都已提交吗？';
+      return '确认修改都已提交吗？';
+    }
+
     onMounted(() => {
+      window.addEventListener('beforeunload', confirmExit, false);
+
       if (window.ace) {
         editor = ace.edit("editor");
         editor.session.setMode("ace/mode/markdown");
@@ -121,6 +125,10 @@ export default {
       } else {
         fillEditableWithData({});
       }
+    })
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('beforeunload', confirmExit);
     })
 
     const onSave = () => {

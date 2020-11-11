@@ -10,14 +10,8 @@
       </div>
     </div>
     <ul className="links">
-      <li>
-        <router-link to="/blog">博客</router-link>
-      </li>
-      <li>
-        <router-link to="/blog?type=tutorial">教程</router-link>
-      </li>
-      <li>
-        <router-link to="/blog?type=thinking">感悟</router-link>
+      <li v-for="(item, key) of categoryConf" :key="key">
+        <router-link :to="`/blog?type=${key}`">{{ item }}</router-link>
       </li>
       <!-- <li>
         <router-link to="/">关于</router-link>
@@ -42,6 +36,7 @@ import {ref, toRef} from 'vue';
 import {RouterLink} from 'vue-router';
 import store from '../../store';
 import {router} from '../../router';
+import {categoryConf} from '../constants'
 import AdminPanel from './Admin/Admin';
 
 export default {
@@ -67,6 +62,7 @@ export default {
         isAdminPanelShow,
         toAdmin,
         logout,
+        categoryConf
       }
     },
     components: {
