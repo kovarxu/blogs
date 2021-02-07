@@ -12,7 +12,7 @@
   }
   
   h1, h2, h3, h4, h5 {
-  font-family: Georgia, Palatino, serif;
+    font-weight: 700;
   }
   h1, h2, h3, h4, h5, dl{
     margin-bottom: 16px;
@@ -24,11 +24,11 @@
     margin-bottom: 5px;
   }
   h1 {
-    font-size: 48px;
+    font-size: 38px;
     line-height: 54px;
   }
   h2 {
-    font-size: 36px;
+    font-size: 30px;
     line-height: 42px;
   }
   h1, h2 {
@@ -67,8 +67,8 @@
     margin: 10px 0;
   }
   p, ul, ol, li {
-    font-size: 18px;
-    line-height: 34px;
+    font-size: 17px;
+    line-height: 30px;
   }
   ol li::before {
     content: '';
@@ -108,8 +108,9 @@
   }
   
   pre {
-    font-family: Consolas, Monaco, Andale Mono, monospace;
-    line-height: 1.7em;
+    font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+    font-size: 14px;
+    line-height: 1.5em;
     overflow: auto;
     padding: 6px 10px;
     border-left: 5px solid rgba(0.3, 0.3, 0.3, .3);
