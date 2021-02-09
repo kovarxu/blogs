@@ -4,17 +4,21 @@ import { get } from '../common/utils';
 
 const gState = {
 	isLogin: false,
-	isMaster: false
+	currentUser: '',
 };
 
-const gGetters = {};
+const gGetters = {
+	isMaster(state) {
+		return state.currentUser === 'kovarxu';
+	}
+};
 
 const gMutations = {
 	mutateLogin(state, result) {
 		state.isLogin = !!result;
 	},
-	mutateMaster(state, master) {
-		state.isMaster = master === 'kovarxu';
+	mutateCurrentUser(state, master) {
+		state.currentUser = master;
 	}
 };
 
@@ -23,7 +27,7 @@ const gActions = {
 		get('/action/checkLoginStatus')
 			.then(data => {
 				commit('mutateLogin', data.data.isLogin);
-				commit('mutateMaster', data.data.user);
+				commit('mutateCurrentUser', data.data.user);
 			})
 	},
 

@@ -66,6 +66,7 @@ export default {
 .pagination {
   display: flex;
   align-items: center;
+  padding-left: 10px;
 }
 .pagination-item {
   cursor: pointer;
@@ -77,8 +78,9 @@ export default {
     text-decoration: underline;
   }
   &.disabled {
-    opacity: .6;
+    opacity: .4;
     &:hover {
+      cursor: not-allowed;
       color: inherit;
       text-decoration: none;
     }

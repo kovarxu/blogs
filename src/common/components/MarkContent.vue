@@ -1,12 +1,16 @@
 <template>
-  <div class="markdown-page" v-html="markContent"></div>
+  <div 
+    class="markdown-page"
+    v-html="markContent"
+  ></div>
 </template>
 
 <script>
 import {ref} from 'vue';
 // import MarkdownIt from 'markdown-it';
 // import hljs from 'highlight.js';
-import 'highlight.js/styles/qtcreator_light.css';
+import {trim} from '../utils';
+import 'highlight.js/styles/vs2015.css';
 import '@/assets/markdown.scss';
 
 export default {
@@ -36,7 +40,13 @@ export default {
         support
       } = data;
 
-      markContent.value = md.render(body);
+      let renderedBody = body;
+      // 给没标题的body加上标题
+      if (! /^#\s/.test(trim(body))) {
+        renderedBody = `# ${title} \n${body}`;
+      }
+
+      markContent.value = md.render(renderedBody);
     }
 
     return {

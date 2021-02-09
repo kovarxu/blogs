@@ -8,7 +8,7 @@
       <input type="text" placeholder="// 描述信息" v-model="describe">
     </div>
 
-    <div class="article-content">
+    <div class="article-content" v-on:keydown.meta.s.prevent.stop="onSave(false)">
       <div id="editor"></div>
     </div>
 
@@ -94,8 +94,15 @@ export default {
 
       if (window.ace) {
         editor = ace.edit("editor");
+        // markdown模式
         editor.session.setMode("ace/mode/markdown");
-        editor.setOption("wrap", true);
+        // 设定tab长度并变成空格
+        editor.getSession().setTabSize(2);
+        editor.session.setUseSoftTabs(true);
+        // 右侧竖线隐藏
+        editor.setShowPrintMargin(false);
+        // 折行显示
+        editor.session.setUseWrapMode(true);
       } else {
         console.error('ace编辑器加载失败');
       }
@@ -131,7 +138,8 @@ export default {
       window.removeEventListener('beforeunload', confirmExit);
     })
 
-    const onSave = () => {
+    // forward：是否跳转到预览页面
+    const onSave = (forward = true) => {
       const vTitle = trim(title.value);
       const vDesc = trim(describe.value);
       const postData = {
@@ -152,8 +160,10 @@ export default {
         return post('/action/article/edit', {id, ...postData}).then(data => {
           const { ret, errmsg } = data;
           if (ret === 0) {
-            props.showTips('修改文章成功');
-            router.push('/article/detail?id=' + data.data.id);
+            props.showTips('保存文章成功');
+            if (forward) {
+              router.push('/article/detail?id=' + data.data.id);
+            }
           } else {
             props.showTips(errmsg);
           }
@@ -314,14 +324,14 @@ export default {
   width: 100px;
   line-height: 30px;
   border-radius: 3px;
-  background-color: rgb(98, 147, 211);
+  background-color: rgb(223, 223, 223);
+  color: #333;
   margin-right: 13px;
   text-align: center;
-  color: #fff;
   font-weight: normal;
   &.selected {
-    background-color: rgb(253, 234, 211);
-    color: #333;
+    background-color: rgb(98, 147, 211);
+    color: #fff;
   }
 }
 .single-tag, .tag {

@@ -1,10 +1,14 @@
 <template>
-  <mark-content ref="markContentRef" />
+  <div class="article-detail">
+    <mark-content ref="markContentRef" />
+    <Comment :articleId="id" :showTips="st" />
+  </div>
 </template>
 
 <script>
 import MarkContent from '@/common/components/MarkContent';
-import {ref, onMounted} from 'vue';
+import Comment from './comment';
+import {ref, onMounted, computed} from 'vue';
 import {get, getStorage} from '@/common/utils';
 import {router} from '@/router';
 
@@ -14,19 +18,20 @@ export default {
     const markContentRef = ref(null);
     const currentRoute = router.currentRoute.value;
 
+    const id = computed(() => router.currentRoute.value.query.id);
+
     if (currentRoute.path === '/article/detail') {
-      const id = currentRoute.query.id;
-        if (id) {
-          get('/action/article/detail', { id })
-            .then(res => {
-              const { ret, data, errmsg } = res;
-              if (ret === 0) {
-                markContentRef.value.renderParagraph(data);
-              } else {
-                props.showTips(errmsg);
-              }
-            })
-        }
+      if (id.value) {
+        get('/action/article/detail', { id: id.value })
+          .then(res => {
+            const { ret, data, errmsg } = res;
+            if (ret === 0) {
+              markContentRef.value.renderParagraph(data);
+            } else {
+              props.showTips(errmsg);
+            }
+          })
+      }
     } else {
       onMounted(() => {
         const val = getStorage('KOVAR_NEW_PAGE_PREVIEW');
@@ -37,7 +42,9 @@ export default {
     }
 
     return {
-      markContentRef
+      markContentRef,
+      id,
+      st: props.showTips
     }
   },
   props: {
@@ -46,12 +53,16 @@ export default {
     }
   },
   components: {
-    MarkContent
+    MarkContent,
+    Comment
   }
 }
 </script>
 
 <style lang="scss">
+.article-detail {
+  padding-bottom: 100px;
+}
 .markdown-page {
   margin-top: 20px;
   margin-bottom: 50px;

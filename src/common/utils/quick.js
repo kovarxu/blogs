@@ -30,6 +30,14 @@ export const injectScript = ({fromUrl, src, remove}) => {
   }
 }
 
+export const escape = (str = '') => {
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+}
+
 /* storage */
 
 // const kovarKey = () => `k_${Math.random().toString(36).slice(3,9)}`;

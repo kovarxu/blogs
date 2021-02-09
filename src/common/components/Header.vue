@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div className="avatar" @click="toAdmin">
-      <img src='./imgs/avatar.jpg' />
+      <img src='./imgs/avatar.jpeg' />
     </div>
     <div className="title">
       <div className="con">
@@ -47,7 +47,7 @@ export default {
       }
 
       const isLogin = toRef(store.state, 'isLogin');
-      const isMaster = toRef(store.state, 'isMaster');
+      const isMaster = toRef(store.getters, 'isMaster');
       const isAdminPanelShow = ref(false);
 
       const toAdmin = () => {
@@ -67,7 +67,7 @@ export default {
     },
     components: {
       RouterLink,
-      AdminPanel
+      AdminPanel,
     }
 }
 </script>

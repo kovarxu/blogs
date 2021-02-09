@@ -12,6 +12,7 @@
   }
   
   h1, h2, h3, h4, h5 {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Tahoma', 'Arial', 'Microsoft Yahei', '微软雅黑', 'Hiragino Sans GB', 'PingFang SC', STHeiTi, sans-serif;
     font-weight: 700;
   }
   h1, h2, h3, h4, h5, dl{
@@ -70,25 +71,25 @@
     font-size: 17px;
     line-height: 30px;
   }
-  ol li::before {
+  ul li::before {
     content: '';
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 12px;
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: #666;
     vertical-align: middle;
   }
-  ul {
+  ol {
     counter-reset: cc;
   }
-  ul li::before {
+  ol li::before {
     counter-increment: cc;
-    content: counter(cc, upper-roman) ".";
+    content: "[" counter(cc, decimal) "].";
     display: inline-block;
     min-width: 1em;
-    margin-right: 20px;
+    margin-right: 8px;
     color: #666;
     vertical-align: middle;
   }
@@ -97,14 +98,11 @@
     list-style-type: lower-roman;
   }
   
-  code, pre {
-    background-color:#f7f7f7;
-    color: inherit;
-  }
-  
   code {
     font-family: Consolas, Monaco, Andale Mono, monospace;
     margin: 0 2px;
+    background: #f1f1f1;
+    padding: 0 1px;
   }
   
   pre {
@@ -114,10 +112,10 @@
     overflow: auto;
     padding: 6px 10px;
     border-left: 5px solid rgba(0.3, 0.3, 0.3, .3);
-  }
-  
-  code {
-    color: #666555;
+
+    code {
+      background: none;
+    }
   }
   
   aside {
